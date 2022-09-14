@@ -26,9 +26,11 @@ on:
       COMMON_TREE_URL:
         description: 'COMMON_TREE_URL (if no common tree, leave blank)'
         required: false
+        default:  'https://github.com/6768Team/android_device_xiaomi_mt6768-common'
       COMMON_PATH:
         description: 'COMMON_PATH (if no common tree, leave blank)'
         required: false
+        default:  'device/xiaomi/mt6768-common'
       DEVICE_NAME:
         description: 'DEVICE_NAME'
         required: true
