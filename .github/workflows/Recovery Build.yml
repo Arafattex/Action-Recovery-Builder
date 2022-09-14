@@ -26,7 +26,7 @@ on:
       COMMON_TREE_URL:
         description: 'COMMON_TREE_URL (if no common tree, leave blank)'
         required: false
-        default:  'https://github.com/6768Team/android_device_xiaomi_mt6768-common'
+        default:  'https://github.com/Arafattex/android_device_xiaomi_mt6768-common.git'
       COMMON_PATH:
         description: 'COMMON_PATH (if no common tree, leave blank)'
         required: false
