@@ -23,15 +23,7 @@ on:
         description: 'DEVICE_PATH'
         required: true
         default: 'device/xiaomi/lancelot'
-      COMMON_TREE_URL:
-        description: 'COMMON_TREE_URL (if no common tree, leave blank)'
-        required: false
-        default:  'https://github.com/Arafattex/android_device_xiaomi_mt6768-common.git'
-      COMMON_PATH:
-        description: 'COMMON_PATH (if no common tree, leave blank)'
-        required: false
-        default:  'device/xiaomi/mt6768-common'
-      DEVICE_NAME:
+       DEVICE_NAME:
         description: 'DEVICE_NAME'
         required: true
         default: 'lancelot'
@@ -122,14 +114,7 @@ jobs:
         git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
       working-directory: ${{ steps.pwd.outputs.pwd }}
 
-    - name: Clone common tree
-      if: |
-        github.event.inputs.COMMON_TREE_URL != null
-        && github.event.inputs.COMMON_PATH != null
-      run: |
-        git clone ${{ github.event.inputs.COMMON_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.COMMON_PATH }}
-      working-directory: ${{ steps.pwd.outputs.pwd }}
-
+   
     - name: Check Build Tree
       uses: haya14busa/action-cond@v1
       id: buildtree
