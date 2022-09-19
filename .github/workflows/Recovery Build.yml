@@ -161,3 +161,10 @@ jobs:
           Target: ${{ github.event.inputs.BUILD_TARGET }}.img
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              
+    - name: Save
+         uses: actions/upload-artifact@v3
+         with:
+            name: compress.zip
+            path: workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/${{ github.event.inputs.BUILD_TARGET }}.img
+            retention-days: 5
