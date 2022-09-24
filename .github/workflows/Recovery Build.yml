@@ -134,15 +134,10 @@ jobs:
       with:
         swap-size-gb: 12
 
-    - name: Check Build Branch
-      if: ${{ github.event.inputs.Twrp_Branch == 'twrp-12.1' }}
-      run: |
-        source build/envsetup.sh
-        repopick 5405 5540
-      working-directory: ${{ steps.pwd.outputs.pwd }}
-
     - name: Building recovery
       run: |
+        cd ~/workspace
+        ls
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
         lunch ${{ github.event.inputs.MAKEFILE_NAME }}-eng && make clean && make ${{ github.event.inputs.BUILD_TARGET }}image -j$(nproc --all)
