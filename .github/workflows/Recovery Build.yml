@@ -18,7 +18,7 @@ on:
       DEVICE_TREE_BRANCH:
         description: 'DEVICE_TREE_BRANCH'
         required: true
-        default: 'Lancelot'
+        default: 'Lancelot_ofox'
       DEVICE_PATH:
         description: 'DEVICE_PATH'
         required: true
@@ -137,9 +137,10 @@ jobs:
     - name: Building recovery
       run: |
         cd ~/workspace/${{ github.event.inputs.Twrp_Branch }}
-        ls
-        source build/envsetup.sh
+        ./build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
+        export FOX_USE_TWRP_RECOVERY_IMAGE_BUILDER=1
+        export LC_ALL="C"
         lunch ${{ github.event.inputs.MAKEFILE_NAME }}-eng && make clean && make ${{ github.event.inputs.BUILD_TARGET }}image -j$(nproc --all)
       working-directory: ${{ steps.pwd.outputs.pwd }}
 
