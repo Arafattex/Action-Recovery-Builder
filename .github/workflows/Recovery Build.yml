@@ -117,7 +117,7 @@ jobs:
       uses: haya14busa/action-cond@v1
       id: buildtree
       with:
-        cond: ${{ github.event.inputs.Twrp_Branch == 'twrp-11' || github.event.inputs.MANIFEST_BRANCH == 'twrp-12.1' }}
+        cond: ${{ github.event.inputs.Twrp_Branch == 'twrp-11' || github.event.inputs.Twrp_Branch == 'twrp-12.1' }}
         if_true: twrp
         if_false: omni
 
