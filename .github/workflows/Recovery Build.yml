@@ -3,7 +3,10 @@ name: Recovery Build
 on:
   workflow_dispatch:
     inputs:
-      
+      Twrp_Branch:
+        description: 'which tree you wanna use'
+        required: true
+        default: 'twrp-12.1'
       Ofox_Version:
         description: 'which version of ofox you wanna build'
         required: true
@@ -91,23 +94,21 @@ jobs:
         chmod a+x ~/bin/repo
         sudo ln -sf ~/bin/repo /usr/bin/repo
       
-    - name: Initialize repo
+    - name: Initialize repo and sync
       run: |
         mkdir workspace
         cd workspace
         echo "::set-output name=pwd::$(pwd)"
         git config --global user.name "Captain Throwback"
         git config --global user.email "captainthrowback@hotmail.com"
-        repo init --depth=1 -u ${{ github.event.inputs.MANIFEST_URL }} -b ${{ github.event.inputs.MANIFEST_BRANCH }}
+        cd ..
+        git clone https://gitlab.com/OrangeFox/sync.git
+        ./sync/orangefox_sync.sh --branch ${{ github.event.inputs.Ofox_Version }} --path ~/workspace/${{ github.event.inputs.Twrp_Branch }}
       id: pwd
           
-    - name: Repo Sync
-      run: |
-        repo sync -j$(nproc --all) --force-sync
-      working-directory: workspace
-      
     - name: Clone device tree
       run: |
+        cd workspace
         git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
       working-directory: ${{ steps.pwd.outputs.pwd }}
 
@@ -116,7 +117,7 @@ jobs:
       uses: haya14busa/action-cond@v1
       id: buildtree
       with:
-        cond: ${{ github.event.inputs.MANIFEST_BRANCH == 'twrp-11' || github.event.inputs.MANIFEST_BRANCH == 'twrp-12.1' }}
+        cond: ${{ github.event.inputs.Twrp_Branch == 'twrp-11' || github.event.inputs.MANIFEST_BRANCH == 'twrp-12.1' }}
         if_true: twrp
         if_false: omni
 
@@ -133,7 +134,7 @@ jobs:
         swap-size-gb: 12
 
     - name: Check Build Branch
-      if: ${{ github.event.inputs.MANIFEST_BRANCH == 'twrp-12.1' }}
+      if: ${{ github.event.inputs.Twrp_Branch == 'twrp-12.1' }}
       run: |
         source build/envsetup.sh
         repopick 5405 5540
@@ -153,7 +154,7 @@ jobs:
         name: ${{ github.event.inputs.DEVICE_NAME }}-${{ github.run_id }}
         tag_name: ${{ github.run_id }}
         body: |
-          Manifest: ${{ github.event.inputs.MANIFEST_BRANCH }}
+          Manifest: Shrp for ${{ github.event.inputs.Twrp_Branch }}
           Device: ${{ github.event.inputs.DEVICE_NAME }}
           Target: ${{ github.event.inputs.BUILD_TARGET }}.img
       env:
