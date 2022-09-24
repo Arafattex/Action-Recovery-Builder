@@ -114,20 +114,9 @@ jobs:
       working-directory: ${{ steps.pwd.outputs.pwd }}
 
    
-    - name: Check Build Tree
-      uses: haya14busa/action-cond@v1
-      id: buildtree
-      with:
-        cond: ${{ github.event.inputs.Twrp_Branch == 'twrp-11' || github.event.inputs.Twrp_Branch == 'twrp-12.1' }}
-        if_true: twrp
-        if_false: omni
+    
 
-    - name: Sync Device Dependencies
-      run: |
-        bash ${GITHUB_WORKSPACE}/scripts/convert.sh ${{ github.event.inputs.DEVICE_PATH }}/${{ steps.buildtree.outputs.value }}.dependencies
-        repo sync -j$(nproc --all)
-      working-directory: ${{ steps.pwd.outputs.pwd }}
-      continue-on-error: true
+    
 
     - name: Set Swap Space
       uses: pierotofy/set-swap-space@master
@@ -136,10 +125,8 @@ jobs:
 
     - name: Building recovery
       run: |
-        cd ~/workspace/${{ github.event.inputs.Twrp_Branch }}/build
-        chmod a+x envsetup.sh
-        cd ..
-        ./build/envsetup.sh
+        cd ~/workspace/${{ github.event.inputs.Twrp_Branch }}
+        source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
         export FOX_USE_TWRP_RECOVERY_IMAGE_BUILDER=1
         export LC_ALL="C"
