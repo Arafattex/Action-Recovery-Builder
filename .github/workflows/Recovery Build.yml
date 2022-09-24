@@ -103,12 +103,13 @@ jobs:
         git config --global user.email "captainthrowback@hotmail.com"
         cd ..
         git clone https://gitlab.com/OrangeFox/sync.git
-        ./sync/orangefox_sync.sh --branch ${{ github.event.inputs.Ofox_Version }} --path ~/workspace/${{ github.event.inputs.Twrp_Branch }}
+        cd sync
+        ./orangefox_sync.sh --branch ${{ github.event.inputs.Ofox_Version }} --path ~/workspace/${{ github.event.inputs.Twrp_Branch }}
       id: pwd
           
     - name: Clone device tree
       run: |
-        cd workspace
+        cd ~/workspace
         git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
       working-directory: ${{ steps.pwd.outputs.pwd }}
 
